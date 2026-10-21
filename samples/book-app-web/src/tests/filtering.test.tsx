@@ -10,12 +10,13 @@ const defaultFilters: BookFiltersState = {
 
 describe("filterBooks", () => {
   it("matches title and author searches without depending on letter case", () => {
-    const results = filterBooks(books, {
-      ...defaultFilters,
-      searchTerm: "hobbit"
-    });
+    const searchTitles = (searchTerm: string) =>
+      filterBooks(books, { ...defaultFilters, searchTerm }).map((book) => book.title);
 
-    expect(results.map((book) => book.title)).toEqual(["The Hobbit"]);
+    expect(searchTitles("HOBBIT")).toEqual(searchTitles("hobbit"));
+    expect(searchTitles("hobbit")).toEqual(["The Hobbit"]);
+    expect(searchTitles("TOLKIEN")).toEqual(searchTitles("tolkien"));
+    expect(searchTitles("tolkien")).toEqual(["The Hobbit"]);
   });
 
   it("filters by genre and reading status together", () => {
